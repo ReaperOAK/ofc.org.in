@@ -68,3 +68,107 @@ section[data-tone="dark"] + section[data-tone="dark"] > div {
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
+
+/* ---------------------------------------------------------------------
+   Hyper-contrast display type. The gap between this and .label-mono
+   (12px, wide-tracked) IS the point — do not narrow it.
+   clamp() reaches ~134px at 1440px viewport width, ~160px ceiling on
+   ultra-wide, and folds down gracefully on mobile.
+--------------------------------------------------------------------- */
+.hero-display {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6vw + 3rem, 10rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------------
+   Grain overlay — printed-paper texture, not visible noise.
+   Fixed above everything, never intercepts pointer events.
+--------------------------------------------------------------------- */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.02;
+  mix-blend-mode: overlay;
+}
+
+/* ---------------------------------------------------------------------
+   Breathing mesh-gradient — CSS radial gradients drifting slowly behind
+   dark sections. Costs a fraction of a WebGL equivalent at this scale.
+--------------------------------------------------------------------- */
+.mesh-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.mesh-gradient::before,
+.mesh-gradient::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background-image:
+    radial-gradient(ellipse 60% 50% at 20% 30%, color-mix(in oklab, var(--color-accent-dark) 26%, transparent), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 80% 20%, color-mix(in oklab, var(--color-accent-dark) 16%, transparent), transparent 65%),
+    radial-gradient(ellipse 50% 60% at 50% 90%, color-mix(in oklab, var(--color-accent-dark) 12%, transparent), transparent 60%);
+  animation: mesh-drift-a 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.mesh-gradient::after {
+  background-image:
+    radial-gradient(ellipse 45% 55% at 70% 70%, color-mix(in oklab, var(--color-accent-dark) 14%, transparent), transparent 60%),
+    radial-gradient(ellipse 40% 40% at 15% 80%, color-mix(in oklab, var(--color-accent-dark) 10%, transparent), transparent 65%);
+  animation: mesh-drift-b 32s ease-in-out infinite alternate;
+  animation-delay: -8s;
+}
+
+@keyframes mesh-drift-a {
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50% { transform: translate3d(2%, -3%, 0) scale(1.08) rotate(4deg); }
+  100% { transform: translate3d(-3%, 2%, 0) scale(1.02) rotate(-3deg); }
+}
+
+@keyframes mesh-drift-b {
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50% { transform: translate3d(-2%, 3%, 0) scale(1.06) rotate(-4deg); }
+  100% { transform: translate3d(3%, -2%, 0) scale(1.03) rotate(3deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh-gradient::before,
+  .mesh-gradient::after {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Glassmorphism service cards.
+--------------------------------------------------------------------- */
+.glass-card {
+  position: relative;
+  background: color-mix(in oklab, var(--color-surface-dark) 55%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ---------------------------------------------------------------------
+   Custom cursor — only once JS confirms a fine, hover-capable pointer
+   and the cursor component has mounted. Native cursor is the fallback
+   at every other moment (no-JS, touch, coarse pointer).
+--------------------------------------------------------------------- */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button {
+    cursor: none;
+  }
+}

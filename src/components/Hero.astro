@@ -1,32 +1,20 @@
 ---
-import { Image } from "astro:assets";
+import { getImage } from "astro:assets";
 import heroImage from "../assets/hero-dairy.jpg";
-import Button from "./Button.astro";
+import MeshGradient from "./MeshGradient.astro";
+import ScrollHero from "./react/ScrollHero";
 import { SITE } from "../data/site";
+
+const optimized = await getImage({ src: heroImage, format: "avif", width: 1920 });
 ---
 
-<section class="relative bg-[var(--color-surface-dark)] text-[var(--color-body-dark)]">
-  <Image
-    src={heroImage}
-    alt=""
-    widths={[768, 1280, 1920]}
-    sizes="100vw"
-    loading="eager"
-    format="avif"
-    class="absolute inset-0 h-full w-full object-cover opacity-35"
+<section class="relative isolate overflow-hidden bg-[var(--color-surface-dark)] text-[var(--color-body-dark)]">
+  <MeshGradient />
+  <ScrollHero
+    client:load
+    imageSrc={optimized.src}
+    eyebrow={SITE.subTagline}
+    heading={SITE.tagline}
+    body="A platform of food professionals providing expert advice and technical guidance to restaurants, food manufacturers, and foodservice companies worldwide."
   />
-  <div class="relative mx-auto max-w-6xl px-6 py-28 md:py-40">
-    <p class="label-mono text-accent-dark">{SITE.subTagline}</p>
-    <h1 class="mt-5 max-w-4xl font-display text-4xl leading-[1.1] md:text-6xl">
-      {SITE.tagline}
-    </h1>
-    <p class="mt-6 max-w-2xl text-lg leading-relaxed opacity-90">
-      A platform of food professionals providing expert advice and technical guidance
-      to restaurants, food manufacturers, and foodservice companies worldwide.
-    </p>
-    <div class="mt-10 flex flex-wrap gap-4">
-      <Button href="/contact" tone="dark">Request a consultation</Button>
-      <Button href="/consultancy" tone="dark" variant="ghost">Explore our services</Button>
-    </div>
-  </div>
 </section>

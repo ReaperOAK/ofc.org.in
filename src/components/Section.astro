@@ -1,9 +1,13 @@
 ---
+import MeshGradient from "./MeshGradient.astro";
+
 interface Props {
   tone?: "light" | "dark";
   id?: string;
+  /** Breathing amber/stone mesh gradient behind the section. Dark tone only. */
+  mesh?: boolean;
 }
-const { tone = "light", id } = Astro.props;
+const { tone = "light", id, mesh = false } = Astro.props;
 const toneClass =
   tone === "dark"
     ? "bg-[var(--color-surface-dark)] text-[var(--color-body-dark)]"
@@ -16,8 +20,9 @@ const toneClass =
   paddings and read as dead space. A tone CHANGE keeps both paddings —
   there the space is doing work.
 -->
-<section id={id} class={toneClass} data-tone={tone}>
-  <div class="mx-auto max-w-6xl px-6 py-20 md:py-28">
+<section id={id} class={`relative isolate overflow-hidden ${toneClass}`} data-tone={tone}>
+  {mesh && tone === "dark" && <MeshGradient />}
+  <div class="relative z-10 mx-auto max-w-6xl px-6 py-20 md:py-28">
     <slot />
   </div>
 </section>

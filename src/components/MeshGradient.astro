@@ -1,0 +1,12 @@
+---
+/*
+  Breathing amber/stone mesh behind dark sections. CSS radial gradients
+  animated via transform (cheap — no layout, no paint storms), not
+  WebGL: at this scale (a handful of sections, not a hero canvas) the
+  visual difference against a Three.js gradient mesh is marginal, and
+  this costs a fraction of the battery/CPU. Animation is fully disabled
+  under prefers-reduced-motion via global.css.
+*/
+---
+
+<div class="mesh-gradient" aria-hidden="true"></div>

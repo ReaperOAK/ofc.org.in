@@ -3,6 +3,8 @@ import "../styles/global.css";
 import SEO from "../components/SEO.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import GrainOverlay from "../components/GrainOverlay.astro";
+import Cursor from "../components/react/Cursor";
 
 interface Props {
   title: string;
@@ -28,8 +30,13 @@ const { title, description, ogImage } = Astro.props;
     >
       Skip to main content
     </a>
+    <GrainOverlay />
+    <Cursor client:load />
     <Header />
     <main id="main"><slot /></main>
     <Footer />
+    <script>
+      import "../scripts/smooth-scroll";
+    </script>
   </body>
 </html>
